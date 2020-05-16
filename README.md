@@ -10,7 +10,7 @@
 
 ```json
 {
-    "image": Binary 포맷의 이미지
+    "image": "Binary 포맷의 이미지"
 }
 ```
 
