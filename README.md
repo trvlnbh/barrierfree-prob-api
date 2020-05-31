@@ -6,6 +6,22 @@
 
 
 
+##### Run server
+
+* 단일 모델로 실행
+
+```shell
+$python barrierfree.py --mode=1
+```
+
+* Average ensemble로 실행
+
+```shell
+$python barrierfree.py --mode=2
+```
+
+
+
 ##### JSON Request 본문:
 
 ```json
