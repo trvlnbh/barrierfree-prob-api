@@ -7,14 +7,14 @@ from flask_cors import CORS
 from barrier_free_model import BFModel, process_img, decode_predictions
 
 
+# Enter a model and a input size tuple to use for ensemble
 MODEL_PATH = '0507-gap-densenet201-size299-half-noise-N3-acc-017-0.8703.h5'
 TARGET_SIZE = (299, 299)
 
-ENSEMBLE_LIST = ['0507-gap-densenet201-size299-half-noise-N3-acc-017-0.8703.h5',
-                 '0424-gap-DenseNet121-basic-config-epoch52.h5',
-                 'TL_vgg19_GAB2_lastEpoch.h5',
-                 'vgg16_8_100031--0.87.h5']
-TARGET_SIZE_LIST = [(299, 299), (150, 150), (150, 150), (224, 224)]
+# Enter a list of models and input size tuples to use for ensemble in order
+ENSEMBLE_LIST = []
+TARGET_SIZE_LIST = []
+NUM_ENSEMBLE = None
 
 app = Flask(__name__)
 CORS(app)
@@ -26,13 +26,18 @@ model = None
 def load_defined_model():
 
     global model
+    print('* Loading model')
 
     if is_ensemble:
+        print('* Ensemble mode')
         model = []
         for m in ENSEMBLE_LIST:
             model.append(BFModel(m))
     else:
+        print('* Single mode')
         model = BFModel(MODEL_PATH)
+
+    print('* Model is loaded')
 
 
 @app.route('/predict', methods=['POST'])
@@ -46,8 +51,8 @@ def image_classifier():
         pred = np.zeros(shape=(1, 2))
         for idx, ts in enumerate(TARGET_SIZE_LIST):
             _image = process_img(image, ts)
-            pred += model.predict(_image)
-        pred /= 4
+            pred += model[idx].predict(_image)
+        pred /= NUM_ENSEMBLE
     else:
         image = process_img(image, TARGET_SIZE)
         pred = model.predict(image)
@@ -72,7 +77,6 @@ if __name__ == "__main__":
                         help='Predict using single model or average ensemble')
     args = parser.parse_args()
 
-    print('* Loading model')
     if args.predict_mode == 1:
         is_ensemble = False
     elif args.predict_mode == 2:
@@ -80,7 +84,6 @@ if __name__ == "__main__":
     else:
         raise argparse.ArgumentTypeError('Mode value must be 1 or 2')
     load_defined_model()
-    print('* Model is loaded')
 
     print('* Starting server')
     app.run()

@@ -6,6 +6,8 @@
 
 
 
+
+
 ##### Run server
 
 * 단일 모델로 실행
@@ -22,6 +24,8 @@ $python barrierfree.py --mode=2
 
 
 
+
+
 ##### JSON Request 본문:
 
 ```json
@@ -29,6 +33,8 @@ $python barrierfree.py --mode=2
     "image": "Binary 포맷의 이미지"
 }
 ```
+
+
 
 
 
