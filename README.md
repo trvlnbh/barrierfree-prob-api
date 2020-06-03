@@ -3,12 +3,13 @@
 
 
 * 이미지 파일을 바이너리 포맷으로 read한 형식 사용
+* `app-run.ipynb` : Colab에서 실행시
 
 
 
 
 
-##### Run server
+#### Run server
 
 * 단일 모델로 실행
 
@@ -26,7 +27,7 @@ $python barrierfree.py --mode=2
 
 
 
-##### JSON Request 본문:
+#### JSON Request 본문:
 
 ```json
 {
@@ -38,7 +39,7 @@ $python barrierfree.py --mode=2
 
 
 
-##### Response:
+#### Response:
 
 ```json
 {
